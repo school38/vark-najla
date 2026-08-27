@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أداة تصنيف أنماط التعلم VARK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --v: #4F8EF7;
+    --a: #F76E9C;
+    --r: #35B58C;
+    --k: #F5A623;
+    --ink:#2A2540;
+    --bg1:#FFF6E9;
+    --bg2:#EAF4FF;
+    --card:#ffffff;
+    --shadow: 0 10px 30px rgba(42,37,64,0.12);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Baloo Bhaijaan 2', 'Tahoma', sans-serif;
+    background: radial-gradient(circle at 20% 10%, var(--bg2), transparent 45%),
+                radial-gradient(circle at 85% 85%, var(--bg1), transparent 50%),
+                linear-gradient(160deg, #FFFDF9, #F1F7FF);
+    color: var(--ink);
+    display:flex;
+    justify-content:center;
+    padding: 24px 14px 60px;
+  }
+  .wrap{ width:100%; max-width:640px; }
+  .brand{
+    text-align:center;
+    margin-bottom:18px;
+  }
+  .brand p{
+    margin:0;
+    color:#6b6580;
+    font-size:15px;
+  }
+  .card{
+    background:var(--card);
+    border-radius:26px;
+    box-shadow:var(--shadow);
+    padding:28px 22px;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .start h2{ text-align:center; font-size:21px; margin:6px 0 2px;}
+  .start p.desc{ text-align:center; color:#6b6580; font-size:15px; line-height:1.7; margin:8px 0 20px;}
+  .desc{ text-align:center; color:#6b6580; font-size:15px; line-height:1.7; margin:8px 0 20px;}
+  label.field-label{ display:block; font-size:15px; margin-bottom:8px; color:var(--ink); font-weight:600;}
+  input#studentName{
+    width:100%;
+    padding:14px 16px;
+    border-radius:16px;
+    border:2px solid #E7E2F5;
+    font-family:inherit;
+    font-size:16px;
+    outline:none;
+    transition:.2s;
+  }
+  input#studentName:focus{ border-color:var(--v); }
+  .select-field{
+    width:100%;
+    padding:14px 16px;
+    border-radius:16px;
+    border:2px solid #E7E2F5;
+    font-family:inherit;
+    font-size:16px;
+    outline:none;
+    background:white;
+    color:var(--ink);
+    transition:.2s;
+  }
+  .select-field:focus{ border-color:var(--v); }
+  .btn{
+    display:block;
+    width:100%;
+    border:none;
+    border-radius:16px;
+    padding:15px;
+    font-family:inherit;
+    font-size:17px;
+    font-weight:700;
+    cursor:pointer;
+    transition:.15s transform, .15s box-shadow;
+  }
+  .btn:active{ transform: scale(0.97); }
+  .btn:disabled{ opacity:.6; cursor:not-allowed; }
+  .btn-primary{
+    margin-top:18px;
+    background: linear-gradient(135deg, var(--v), #7BB3FF);
+    color:white;
+    box-shadow: 0 8px 20px rgba(79,142,247,0.35);
+  }
+  .btn-secondary{
+    margin-top:12px;
+    background:#F3F1FB;
+    color:var(--ink);
+  }
+  .btn-ghost{
+    margin-top:10px;
+    background:transparent;
+    color:#7A6FD1;
+    text-decoration:underline;
+    padding:8px;
+  }
+  .progress-row{
+    display:flex; align-items:center; gap:10px; margin-bottom:18px;
+  }
+  .progress-bar{
+    flex:1;
+    height:10px;
+    background:#EFEBFA;
+    border-radius:10px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background: linear-gradient(90deg, var(--v), var(--a));
+    border-radius:10px;
+    transition: width .3s ease;
+  }
+  .progress-label{ font-size:13px; color:#8b85a3; white-space:nowrap; }
+  .q-title{
+    font-size:19px;
+    text-align:center;
+    margin:4px 0 20px;
+    line-height:1.6;
+  }
+  .options{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+  }
+  .opt{
+    background:#FBFAFF;
+    border:2px solid #ECE8F7;
+    border-radius:18px;
+    padding:16px 10px;
+    text-align:center;
+    cursor:pointer;
+    transition:.15s;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:8px;
+  }
+  .opt .emoji{ font-size:30px; }
+  .opt span.txt{ font-size:14.5px; line-height:1.4; }
+  .opt:hover{ border-color:#D9D2F5; background:#F5F2FF; }
+  .opt.v:hover, .opt.v.picked{ border-color:var(--v); background:#EAF2FF; }
+  .opt.a:hover, .opt.a.picked{ border-color:var(--a); background:#FFEAF1; }
+  .opt.r:hover, .opt.r.picked{ border-color:var(--r); background:#E7F8F1; }
+  .opt.k:hover, .opt.k.picked{ border-color:var(--k); background:#FFF3E0; }
+  .result-emoji{ text-align:center; font-size:56px; }
+  .result-name{ text-align:center; font-size:22px; margin:4px 0 2px; font-weight:700; }
+  .result-type{ text-align:center; font-size:18px; font-weight:700; margin-bottom:10px; }
+  .result-desc{ text-align:center; color:#5a5470; font-size:15px; line-height:1.8; margin-bottom:18px; }
+  .bars{ display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+  .bar-row{ display:flex; align-items:center; gap:10px; }
+  .bar-label{ width:78px; font-size:14px; font-weight:700; display:flex; align-items:center; gap:6px; }
+  .bar-track{ flex:1; height:14px; background:#F1EEFA; border-radius:10px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:10px; transition: width .5s ease; }
+  .tips-box{
+    background:#FBFAFF;
+    border:1.5px dashed #DED7F5;
+    border-radius:16px;
+    padding:14px 16px;
+    font-size:14px;
+    line-height:1.8;
+    color:#4c4665;
+    margin-bottom:16px;
+  }
+  .tips-box b{ color:var(--ink); }
+  .dash-list{ display:flex; flex-direction:column; gap:10px; margin-bottom:10px; max-height:400px; overflow-y:auto; }
+  .dash-item{
+    display:flex; align-items:center; justify-content:space-between;
+    background:#FBFAFF; border:1.5px solid #ECE8F7; border-radius:14px; padding:12px 14px;
+  }
+  .dash-item .nm{ font-weight:700; font-size:15px; }
+  .dash-item .tp{ font-size:14px; font-weight:700; padding:4px 10px; border-radius:10px; color:white;}
+  .dash-item .actions{ display:flex; align-items:center; gap:8px; }
+  .dash-del{
+    background:#FFEAEF; color:#D6336C; border:none; border-radius:10px;
+    width:34px; height:34px; font-size:16px; cursor:pointer; flex-shrink:0;
+  }
+  .dash-edit{
+    background:#EAF2FF; color:#2A5FCC; border:none; border-radius:10px;
+    width:34px; height:34px; font-size:15px; cursor:pointer; flex-shrink:0;
+  }
+  .empty-msg{ text-align:center; color:#9a94b0; padding:30px 10px; font-size:15px; }
+  .footer-note{
+    text-align:center; color:#a39dbb; font-size:12.5px; margin-top:14px;
+  }
+  .top-actions{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .icon-btn{
+    background:#F3F1FB; border:none; border-radius:12px; padding:8px 14px; font-size:14px; cursor:pointer; font-family:inherit; font-weight:600; color:var(--ink);
+  }
+  .pill{
+    display:inline-flex; align-items:center; gap:6px;
+    background:#F3F1FB; border-radius:20px; padding:6px 12px; font-size:13.5px; color:var(--ink);
+  }
+  .pill button{
+    background:none; border:none; color:#D6336C; cursor:pointer; font-size:13px; padding:0; line-height:1;
+  }
+  .level-tabs{
+    display:flex; gap:8px;
+  }
+  .level-tab{
+    flex:1;
+    background:#F3F1FB; border:2px solid transparent; border-radius:14px;
+    padding:10px 6px; font-family:inherit; font-size:13px; font-weight:700;
+    color:#6b6580; cursor:pointer; text-align:center; transition:.15s;
+  }
+  .level-tab.active{
+    background:#EAF2FF; border-color:var(--v); color:var(--v);
+  }
+  .acc-item{
+    border:1px solid #ECE7F7; border-radius:18px; margin-bottom:12px; overflow:hidden;
+    background:#ffffff; transition:box-shadow .2s;
+  }
+  .acc-header{
+    width:100%; background:#ffffff; border:none; border-top:3px solid transparent;
+    padding:16px 18px; font-weight:600; font-size:15px; color:var(--ink);
+    display:flex; justify-content:space-between; align-items:center;
+    cursor:pointer; font-family:inherit; letter-spacing:.2px;
+  }
+  .acc-arrow{ transition:.25s; font-size:12px; color:#c3bdd6; }
+  .acc-panel{
+    padding:2px 18px 18px; font-size:13.5px; line-height:1.9; color:#57516b; background:#ffffff;
+  }
+  .acc-panel b{ font-weight:600; color:var(--ink); font-size:13px; }
+  .acc-panel ul{ list-style:none; margin:6px 0 14px; padding:0; }
+  .acc-panel ul:last-child{ margin-bottom:0; }
+  .acc-panel li{ position:relative; padding-inline-end:16px; margin-bottom:6px; }
+  .acc-panel li::before{ content:"–"; position:absolute; inset-inline-end:0; color:#c3bdd6; }
+  @media print{
+    body{ background:white !important; padding:0; }
+    .top-actions, .select-field, .dash-edit, .dash-del, .footer-note, .brand, .pill button, .settings-panel, .report-filters{ display:none !important; }
+    .card{ box-shadow:none; border-radius:0; padding:0; }
+    .dash-item{ break-inside: avoid; border-color:#ccc; }
+    #printReportTitle{ display:block !important; }
+  }
+  body.generating-pdf .top-actions,
+  body.generating-pdf .select-field,
+  body.generating-pdf .dash-edit,
+  body.generating-pdf .dash-del,
+  body.generating-pdf .footer-note,
+  body.generating-pdf .brand,
+  body.generating-pdf .pill button,
+  body.generating-pdf .settings-panel,
+  body.generating-pdf .report-filters{ display:none !important; }
+  body.generating-pdf .card{ box-shadow:none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="brand">
+    <p>أداة VARK لتصنيف طريقة تعلم كل طالبة</p>
+    <p id="teacherLine" style="margin-top:4px; font-size:13.5px; color:#a39dbb;">الابتدائية ٣٨</p>
+  </div>
+
+  <div class="card" id="app"><div class="empty-msg">جارٍ التحميل...</div></div>
+  <div class="footer-note" id="footerNote"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore, doc, getDoc, setDoc, collection, getDocs, deleteDoc, query, where
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyC46pKkOOrVBLmI5oXmZiIB9Nbl4AIF2bY",
+  authDomain: "vark-38.firebaseapp.com",
+  projectId: "vark-38",
+  storageBucket: "vark-38.firebasestorage.app",
+  messagingSenderId: "1050526585653",
+  appId: "1:1050526585653:web:817da2f845d67550d7727c",
+  measurementId: "G-VQLRMP2JSY"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+
+const TYPES = {
+  V: { name:"بصرية", emoji:"👀", color:"#4F8EF7",
+       desc:"تتعلمين أفضل من خلال الصور والألوان والرسوم والخرائط الذهنية.",
+       tips:"استخدمي لها: صور، ألوان مميزة، رسوم بيانية، خرائط ذهنية، فيديوهات قصيرة.",
+       formalName:"البصري",
+       formalDesc:"تتعلّم الطالبة ذات النمط البصري بشكل أفضل من خلال ما تراه، كالصور والألوان والرسوم والخرائط الذهنية.",
+       signs:["تميل إلى الرسم والتلوين","تتذكر المعلومة بشكل أفضل إذا شاهدتها مكتوبة أو مرسومة","تنتبه للتفاصيل البصرية من حولها"],
+       methods:["استخدام الصور والرسوم البيانية أثناء الشرح","الاستعانة بالخرائط الذهنية لتلخيص الدروس","استخدام الألوان المميزة للتفريق بين الأفكار","عرض مقاطع فيديو تعليمية قصيرة"] },
+  A: { name:"سمعية", emoji:"👂", color:"#F76E9C",
+       desc:"تتعلمين أفضل من خلال الاستماع والنقاش والشرح الصوتي.",
+       tips:"استخدمي لها: الشرح الصوتي، الأناشيد، القراءة بصوت عالٍ، النقاش الجماعي.",
+       formalName:"السمعي",
+       formalDesc:"تتعلّم الطالبة ذات النمط السمعي بشكل أفضل من خلال ما تسمعه، كالشرح الصوتي والنقاش والقراءة بصوت مرتفع.",
+       signs:["تميل إلى المشاركة في النقاش الصفي","تحفظ المعلومة بسرعة عند سماعها بدلاً من قراءتها","تُردّد الدرس بصوت مرتفع أثناء المذاكرة"],
+       methods:["الشرح الصوتي وسرد القصص أثناء الدرس","استخدام الأناشيد والأغاني التعليمية","القراءة بصوت مرتفع داخل الفصل","تنظيم نقاش جماعي لتبادل الأفكار"] },
+  R: { name:"قرائية-كتابية", emoji:"✏️", color:"#35B58C",
+       desc:"تتعلمين أفضل من خلال القراءة والكتابة والملخصات والقوائم.",
+       tips:"استخدمي لها: أوراق عمل مكتوبة، دفاتر ملاحظات، قوائم وكلمات مفتاحية.",
+       formalName:"القرائي-الكتابي",
+       formalDesc:"تتعلّم الطالبة ذات النمط القرائي-الكتابي بشكل أفضل من خلال القراءة والكتابة، كالنصوص والقوائم وتدوين الملاحظات.",
+       signs:["تميل إلى القراءة والكتابة","تدوّن ملاحظات كثيرة أثناء الشرح","تُفضّل الكتب والنصوص المكتوبة على الصور"],
+       methods:["توفير أوراق عمل مكتوبة وقوائم منظمة","تشجيعها على تدوين ملخصات بخط يدها","استخدام الكلمات المفتاحية والتعريفات المكتوبة","تخصيص دفتر ملاحظات لكل مادة"] },
+  K: { name:"حركية", emoji:"🤸", color:"#F5A623",
+       desc:"تتعلمين أفضل من خلال الحركة والتجربة والأنشطة العملية.",
+       tips:"استخدمي لها: أنشطة عملية، ألعاب تعليمية، تمثيل وحركة، تجارب يدوية.",
+       formalName:"الحركي",
+       formalDesc:"تتعلّم الطالبة ذات النمط الحركي بشكل أفضل من خلال الحركة والتجربة العملية والأنشطة اليدوية.",
+       signs:["لا تُفضّل الجلوس لفترات طويلة","تتعلّم بشكل أفضل من خلال التجربة، لا الاستماع أو القراءة فقط","تميل إلى الأنشطة العملية والألعاب التعليمية"],
+       methods:["تنفيذ أنشطة عملية وتجارب يدوية","استخدام الألعاب التعليمية وتمثيل الأدوار","تخصيص فترات حركة قصيرة بين فقرات الشرح","استخدام أدوات ملموسة أثناء الدرس، كالبطاقات والمكعبات والنماذج"] },
+};
+
+const QUESTIONS = [
+  { q:"لما تبين تتعلمين معلومة جديدة، تحبين...",
+    opts:[["شوف صورة أو فيديو 🖼️","V"],["أسمع أحد يشرحلي 🗣️","A"],["أقرأ عنها في كتاب 📖","R"],["أجربها بنفسي ✋","K"]] },
+  { q:"في وقت اللعب، ألعابك المفضلة فيها...",
+    opts:[["رسم وألوان 🎨","V"],["أغاني وأصوات 🎵","A"],["كلمات وقصص 📚","R"],["حركة وجري 🏃‍♀️","K"]] },
+  { q:"لما تحفظين الدرس، أسهل طريقة لك...",
+    opts:[["أرسم خريطة ذهنية 🗺️","V"],["أكرره بصوت عالي 📢","A"],["أكتب ملخص ✍️","R"],["أمثله بحركات 🎭","K"]] },
+  { q:"أفضل طريقة أتعلم فيها كلمة جديدة بالإنجليزي...",
+    opts:[["أشوف صورة توضحها 🖼️","V"],["أسمعها من المعلمة 👂","A"],["أكتبها كذا مرة 📝","R"],["أستخدمها بلعبة 🎮","K"]] },
+  { q:"في المكتبة، أحب القصص اللي...",
+    opts:[["فيها صور كثيرة 🌈","V"],["أسمعها مسجلة 🎧","A"],["أقرأها بنفسي 📗","R"],["فيها نشاط أسويه 🧩","K"]] },
+  { q:"أتذكر الأشياء أفضل إذا...",
+    opts:[["شفتها بعيني 👁️","V"],["سمعتها بأذني 👂","A"],["كتبتها بيدي ✍️","R"],["سويتها بنفسي 🙌","K"]] },
+  { q:"في الرحلة المدرسية، أحلى شي...",
+    opts:[["أصور وأشوف الأماكن 📸","V"],["أسمع قصص عن المكان 🎙️","A"],["أقرأ لوحة المعلومات 📋","R"],["ألمس وأجرب الأشياء 🖐️","K"]] },
+  { q:"لو ضعت وأبي أوصل مكان، أفضل...",
+    opts:[["خريطة أشوفها 🗺️","V"],["أحد يوصف لي الطريق 🗣️","A"],["تعليمات مكتوبة 📄","R"],["أمشي وأجرب بنفسي 🚶‍♀️","K"]] },
+  { q:"أحب المعلمة تشرح الدرس بـ...",
+    opts:[["رسومات وألوان على السبورة 🖍️","V"],["كلامها وقصصها 💬","A"],["كتابة النقاط بالدفتر 📓","R"],["نشاط أو تجربة نسويها 🔬","K"]] },
+  { q:"أسهل شي يخليني أفهم الرياضيات...",
+    opts:[["رسم الأشكال 🔺","V"],["شرح صوتي بالخطوات 🔊","A"],["قراءة أمثلة مكتوبة 📐","R"],["أدوات ألعب فيها بيدي 🧮","K"]] },
+];
+
+const DEFAULT_GRADES = ["الصف الأول", "الصف الثالث"];
+const DEFAULT_SECTIONS = ["أ", "ب", "ج"];
+const PIN_RE = /^\d{4}$/;
+
+/* ---------- Firestore helpers ---------- */
+async function fbEnsureTeacher(pin){
+  const ref = doc(db, "vark_teachers", pin);
+  const snap = await getDoc(ref);
+  if(snap.exists()) return snap.data();
+  const fresh = { grades: DEFAULT_GRADES.slice(), sections: DEFAULT_SECTIONS.slice(), teacherName: "" };
+  await setDoc(ref, fresh);
+  return fresh;
+}
+async function fbSaveTeacherField(pin, field, value){
+  await setDoc(doc(db, "vark_teachers", pin), { [field]: value }, { merge: true });
+}
+function studentDocId(pin, grade, section, name){
+  return pin + "__" + encodeURIComponent(grade) + "__" + encodeURIComponent(section) + "__" + encodeURIComponent(name);
+}
+async function fbSaveStudent(pin, grade, section, name, data){
+  const id = studentDocId(pin, grade, section, name);
+  await setDoc(doc(db, "vark_students", id), { pin, grade, section, name, ...data });
+  return id;
+}
+async function fbGetStudents(pin){
+  const q = query(collection(db, "vark_students"), where("pin", "==", pin));
+  const snap = await getDocs(q);
+  return snap.docs.map(d => ({ _id: d.id, ...d.data() }));
+}
+async function fbDeleteStudent(id){
+  await deleteDoc(doc(db, "vark_students", id));
+}
+
+/* ---------- Routing / state ---------- */
+const urlParams = new URLSearchParams(window.location.search);
+const URL_PIN = (urlParams.get('t') || '').trim();
+
+let state = {
+  screen: PIN_RE.test(URL_PIN) ? "start" : "teacherPinGate",
+  pin: PIN_RE.test(URL_PIN) ? URL_PIN : "",
+  teacherData: { grades: DEFAULT_GRADES.slice(), sections: DEFAULT_SECTIONS.slice(), teacherName: "" },
+  name:"", grade:"", section:"", answers:[], current:0, reportLevel:"grade"
+};
+const app = document.getElementById("app");
+const footerNote = document.getElementById("footerNote");
+
+function updateBrandLine(){
+  const el = document.getElementById('teacherLine');
+  if(!el) return;
+  const name = (state.teacherData && state.teacherData.teacherName) || '';
+  el.textContent = name ? ('إعداد: ' + name + ' — الابتدائية ٣٨') : 'الابتدائية ٣٨';
+}
+
+function render(){
+  if(state.screen === "start") renderStart();
+  else if(state.screen === "quiz") renderQuiz();
+  else if(state.screen === "review") renderReview();
+  else if(state.screen === "result") renderResult();
+  else if(state.screen === "teacherPinGate") renderTeacherPinGate();
+  else if(state.screen === "teacherMenu") renderTeacherMenu();
+  else if(state.screen === "teacherSettings") renderTeacherSettings();
+  else if(state.screen === "dashboard") renderDashboard();
+}
+
+/* ---------- Teacher PIN gate (only reachable with no ?t= in URL) ---------- */
+function renderTeacherPinGate(){
+  footerNote.textContent = "";
+  app.innerHTML = `
+    <h2 style="text-align:center; font-size:19px; margin:6px 0 4px;">🔑 دخول المعلمة</h2>
+    <p class="desc" style="margin-bottom:18px;">
+      «VARK» طريقة تصنّف أنماط تعلّم الطلاب إلى أربعة أنماط رئيسة: البصري، والسمعي، والقرائي-الكتابي، والحركي؛ بهدف مساعدة المعلمة على تنويع أساليب شرحها بما يلائم كل طالبة.
+    </p>
+    <p class="desc" style="margin-top:0;">يُرجى إدخال الرقم السري المكوّن من أربعة أرقام. عند إدخاله لأول مرة، تُنشأ مساحتك الخاصة تلقائيًا؛ يُرجى الاحتفاظ به لأنك ستحتاجين إليه في كل مرة تدخلين فيها.</p>
+    <input type="text" inputmode="numeric" maxlength="4" id="teacherPin" class="select-field" placeholder="مثال: 1234" style="text-align:center; letter-spacing:6px; font-size:20px;">
+    <div id="gateMsg" style="text-align:center; color:#D6336C; font-size:13.5px; margin-top:8px;"></div>
+    <button class="btn btn-primary" id="gateBtn">دخول</button>
+
+    <div style="margin-top:26px;">
+      <div style="text-align:center; font-weight:700; color:#6b6580; font-size:13.5px; margin-bottom:12px;">تعرّفي على الأنماط الأربعة</div>
+      <div id="typeAccordion"></div>
+    </div>
+
+    <div style="text-align:left; color:#c3bdd6; font-size:11px; margin-top:20px;">إعداد: نجلاء عبدالله</div>
+  `;
+  const accEl = document.getElementById("typeAccordion");
+  accEl.innerHTML = Object.keys(TYPES).map(t => {
+    const type = TYPES[t];
+    return `
+      <div class="acc-item">
+        <button class="acc-header" data-type="${t}" style="border-top-color:${type.color};">
+          <span>${type.formalName}</span>
+          <span class="acc-arrow" id="arrow-${t}">⌄</span>
+        </button>
+        <div class="acc-panel" id="panel-${t}" style="display:none;">
+          <p style="margin:8px 0 12px;">${type.formalDesc}</p>
+          <b>من علاماته</b>
+          <ul>
+            ${type.signs.map(s => `<li>${s}</li>`).join("")}
+          </ul>
+          <b>طرق تدريس مقترحة</b>
+          <ul>
+            ${type.methods.map(s => `<li>${s}</li>`).join("")}
+          </ul>
+        </div>
+      </div>
+    `;
+  }).join("");
+  accEl.querySelectorAll(".acc-header").forEach(btn => {
+    btn.onclick = () => {
+      const t = btn.getAttribute("data-type");
+      const panel = document.getElementById("panel-" + t);
+      const arrow = document.getElementById("arrow-" + t);
+      const isOpen = panel.style.display !== "none";
+      panel.style.display = isOpen ? "none" : "block";
+      arrow.style.transform = isOpen ? "rotate(0deg)" : "rotate(180deg)";
+    };
+  });
+
+  document.getElementById("gateBtn").onclick = async () => {
+    const val = document.getElementById("teacherPin").value.trim();
+    const msg = document.getElementById("gateMsg");
+    if(!PIN_RE.test(val)){
+      msg.textContent = "يُرجى إدخال أربعة أرقام بالضبط.";
+      return;
+    }
+    const btn = document.getElementById("gateBtn");
+    btn.textContent = "جارٍ الدخول..."; btn.disabled = true;
+    try{
+      const data = await fbEnsureTeacher(val);
+      state.pin = val;
+      state.teacherData = data;
+      state.screen = "teacherMenu";
+      updateBrandLine();
+      render();
+    }catch(e){
+      msg.textContent = "حدث خطأ في الاتصال، يُرجى التحقق من الإنترنت والمحاولة مرة أخرى.";
+      btn.textContent = "دخول"; btn.disabled = false;
+    }
+  };
+}
+
+function renderTeacherMenu(){
+  footerNote.textContent = "";
+  const link = window.location.origin + window.location.pathname + "?t=" + state.pin;
+  app.innerHTML = `
+    <h2 style="text-align:center; font-size:19px; margin:6px 0 4px;">👋 أهلًا بك</h2>
+    <p class="desc" style="margin-bottom:16px;">رقمك السري: <b>${state.pin}</b></p>
+
+    <div class="card settings-panel" style="margin-bottom:16px; padding:16px; box-shadow:none; border:1.5px solid #ECE8F7;">
+      <label class="field-label" style="margin-bottom:6px;">🔗 رابط طالباتك (شاركيه معهن)</label>
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="shareLink" class="select-field" value="${link}" readonly style="font-size:13px;">
+        <button class="btn btn-secondary" id="copyLinkBtn" style="margin-top:0; width:auto; padding:0 16px; white-space:nowrap;">نسخ</button>
+      </div>
+      <div style="text-align:center; color:#a39dbb; font-size:12px; margin-top:8px;">كل طالبة تفتح هذا الرابط بالذات، وإجاباتها تنحفظ عندك أنتِ بس</div>
+    </div>
+
+    <button class="btn btn-primary" id="menuSettingsBtn">⚙️ إدارة الفصول</button>
+    <button class="btn btn-secondary" id="menuReportsBtn">📊 تحميل التقرير (صف / فصل / طالبة)</button>
+    <button class="btn btn-ghost" id="menuBackBtn" style="width:100%;">🚪 خروج</button>
+  `;
+  document.getElementById("copyLinkBtn").onclick = () => {
+    const inp = document.getElementById("shareLink");
+    inp.select(); inp.setSelectionRange(0, 99999);
+    const btn = document.getElementById("copyLinkBtn");
+    try{
+      navigator.clipboard.writeText(link);
+      btn.textContent = "تم النسخ ✓";
+      setTimeout(()=>{ btn.textContent = "نسخ"; }, 1500);
+    }catch(e){
+      document.execCommand && document.execCommand('copy');
+    }
+  };
+  document.getElementById("menuSettingsBtn").onclick = () => {
+    state.screen = "teacherSettings";
+    render();
+  };
+  document.getElementById("menuReportsBtn").onclick = () => {
+    state.screen = "dashboard";
+    render();
+  };
+  document.getElementById("menuBackBtn").onclick = () => {
+    state.pin = "";
+    state.teacherData = { grades: DEFAULT_GRADES.slice(), sections: DEFAULT_SECTIONS.slice(), teacherName: "" };
+    state.screen = "teacherPinGate";
+    updateBrandLine();
+    render();
+  };
+}
+
+/* ---------- Teacher settings (grades/sections/name) ---------- */
+function renderSettingsPanel(){
+  const teacherName = state.teacherData.teacherName || "";
+  const grades = state.teacherData.grades || DEFAULT_GRADES;
+  const sections = state.teacherData.sections || DEFAULT_SECTIONS;
+  return `
+    <div class="card settings-panel" style="margin-bottom:16px; padding:16px; box-shadow:none; border:1.5px solid #ECE8F7;">
+      <div style="font-weight:700; margin-bottom:12px;">⚙️ إعدادات الأداة</div>
+
+      <label class="field-label" style="margin-bottom:6px;">اسمك (يظهر في التقرير)</label>
+      <input type="text" id="teacherNameInput" class="select-field" value="${teacherName}" placeholder="مثال: سارة" style="margin-bottom:16px;">
+
+      <label class="field-label" style="margin-bottom:6px;">الصفوف</label>
+      <div id="gradesPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        ${grades.map(g => `<span class="pill">${g} <button data-delgrade="${g.replace(/"/g,'&quot;')}">✕</button></span>`).join("")}
+      </div>
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <input type="text" id="newGradeInput" class="select-field" placeholder="أضيفي صف جديد">
+        <button class="btn btn-secondary" id="addGradeBtn" style="margin-top:0; width:auto; padding:0 16px; white-space:nowrap;">+ إضافة</button>
+      </div>
+
+      <label class="field-label" style="margin-bottom:6px;">الفصول</label>
+      <div id="sectionsPills" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+        ${sections.map(s => `<span class="pill">${s} <button data-delsection="${s.replace(/"/g,'&quot;')}">✕</button></span>`).join("")}
+      </div>
+      <div style="display:flex; gap:8px; margin-bottom:16px;">
+        <input type="text" id="newSectionInput" class="select-field" placeholder="أضيفي فصل جديد">
+        <button class="btn btn-secondary" id="addSectionBtn" style="margin-top:0; width:auto; padding:0 16px; white-space:nowrap;">+ إضافة</button>
+      </div>
+
+      <button class="btn btn-primary" id="saveTeacherNameBtn" style="margin-top:4px;">💾 حفظ</button>
+    </div>
+  `;
+}
+
+function renderTeacherSettings(){
+  footerNote.textContent = "";
+  app.innerHTML = `
+    <div class="top-actions">
+      <button class="icon-btn" id="backBtn">⬅️ رجوع</button>
+      <span style="font-weight:700;">⚙️ إعدادات الأداة</span>
+      <span style="width:60px;"></span>
+    </div>
+    ${renderSettingsPanel()}
+  `;
+  document.getElementById("backBtn").onclick = () => {
+    state.screen = "teacherMenu";
+    render();
+  };
+  wireSettingsPanel();
+}
+
+function wireSettingsPanel(){
+  document.getElementById("saveTeacherNameBtn").onclick = async () => {
+    const btn = document.getElementById("saveTeacherNameBtn");
+    const val = document.getElementById("teacherNameInput").value.trim();
+    btn.textContent = "..."; btn.disabled = true;
+    try{
+      await fbSaveTeacherField(state.pin, "teacherName", val);
+      state.teacherData.teacherName = val;
+      updateBrandLine();
+      btn.textContent = "تم ✓";
+      setTimeout(()=>{ btn.textContent = "💾 حفظ"; btn.disabled = false; }, 1200);
+    }catch(e){ btn.textContent = "💾 حفظ"; btn.disabled = false; alert("تعذر الحفظ، حاولي مرة ثانية."); }
+  };
+  document.querySelectorAll("[data-delgrade]").forEach(b => {
+    b.onclick = async () => {
+      const g = b.getAttribute("data-delgrade");
+      if(!confirm(`حذف "${g}" من قائمة الصفوف؟`)) return;
+      const arr = (state.teacherData.grades || DEFAULT_GRADES).filter(x => x !== g);
+      try{ await fbSaveTeacherField(state.pin, "grades", arr); state.teacherData.grades = arr; renderTeacherSettings(); }
+      catch(e){ alert("تعذر الحذف، حاولي مرة ثانية."); }
+    };
+  });
+  document.querySelectorAll("[data-delsection]").forEach(b => {
+    b.onclick = async () => {
+      const s = b.getAttribute("data-delsection");
+      if(!confirm(`حذف "${s}" من قائمة الفصول؟`)) return;
+      const arr = (state.teacherData.sections || DEFAULT_SECTIONS).filter(x => x !== s);
+      try{ await fbSaveTeacherField(state.pin, "sections", arr); state.teacherData.sections = arr; renderTeacherSettings(); }
+      catch(e){ alert("تعذر الحذف، حاولي مرة ثانية."); }
+    };
+  });
+  document.getElementById("addGradeBtn").onclick = async () => {
+    const inp = document.getElementById("newGradeInput");
+    const v = inp.value.trim();
+    if(!v) return;
+    const arr = (state.teacherData.grades || DEFAULT_GRADES).slice();
+    if(!arr.includes(v)){
+      arr.push(v);
+      try{ await fbSaveTeacherField(state.pin, "grades", arr); state.teacherData.grades = arr; renderTeacherSettings(); }
+      catch(e){ alert("تعذر الحفظ، حاولي مرة ثانية."); }
+    }
+  };
+  document.getElementById("addSectionBtn").onclick = async () => {
+    const inp = document.getElementById("newSectionInput");
+    const v = inp.value.trim();
+    if(!v) return;
+    const arr = (state.teacherData.sections || DEFAULT_SECTIONS).slice();
+    if(!arr.includes(v)){
+      arr.push(v);
+      try{ await fbSaveTeacherField(state.pin, "sections", arr); state.teacherData.sections = arr; renderTeacherSettings(); }
+      catch(e){ alert("تعذر الحفظ، حاولي مرة ثانية."); }
+    }
+  };
+}
+
+/* ---------- Student flow ---------- */
+function renderStart(){
+  footerNote.textContent = "";
+  const grades = state.teacherData.grades || DEFAULT_GRADES;
+  const sections = state.teacherData.sections || DEFAULT_SECTIONS;
+  app.innerHTML = `
+    <div class="start">
+      <h2>اكتشفي طريقتك المفضلة بالتعلم</h2>
+      <p class="desc">جاوبي على ${QUESTIONS.length} أسئلة بسيطة وبنعرف إذا تتعلمين أفضل بالصور، بالصوت، بالقراءة، أو بالحركة!</p>
+      <label class="field-label" for="studentName">اكتبي اسمك:</label>
+      <input type="text" id="studentName" placeholder="مثال: سارة" />
+      <label class="field-label" for="studentGrade" style="margin-top:14px;">الصف:</label>
+      <select id="studentGrade" class="select-field">
+        <option value="">اختاري الصف</option>
+        ${grades.map(g => `<option value="${g}">${g}</option>`).join("")}
+      </select>
+      <label class="field-label" for="studentSection" style="margin-top:14px;">الفصل:</label>
+      <select id="studentSection" class="select-field">
+        <option value="">اختاري الفصل</option>
+        ${sections.map(s => `<option value="${s}">${s}</option>`).join("")}
+      </select>
+      <button class="btn btn-primary" id="startBtn">ابدأ الاختبار 🚀</button>
+    </div>
+  `;
+  document.getElementById("startBtn").onclick = () => {
+    const nameInp = document.getElementById("studentName");
+    const gradeSel = document.getElementById("studentGrade");
+    const sectionSel = document.getElementById("studentSection");
+    const val = nameInp.value.trim();
+    let ok = true;
+    [nameInp, gradeSel, sectionSel].forEach(el => el.style.borderColor = "#E7E2F5");
+    if(!val){ nameInp.style.borderColor = "#F76E9C"; ok = false; }
+    if(!gradeSel.value){ gradeSel.style.borderColor = "#F76E9C"; ok = false; }
+    if(!sectionSel.value){ sectionSel.style.borderColor = "#F76E9C"; ok = false; }
+    if(!ok) return;
+    state.name = val;
+    state.grade = gradeSel.value;
+    state.section = sectionSel.value;
+    state.answers = [];
+    state.current = 0;
+    state.screen = "quiz";
+    render();
+  };
+}
+
+function renderQuiz(){
+  const qIndex = state.current;
+  const q = QUESTIONS[qIndex];
+  const pct = Math.round((qIndex/QUESTIONS.length)*100);
+  const currentAnswer = state.answers[qIndex];
+  footerNote.textContent = "";
+  app.innerHTML = `
+    <div class="progress-row">
+      <span class="progress-label">${qIndex+1} / ${QUESTIONS.length}</span>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+    </div>
+    <div class="q-title">${q.q}</div>
+    <div class="options">
+      ${q.opts.map(([label, type], i) => `
+        <div class="opt ${type.toLowerCase()} ${currentAnswer===type?'picked':''}" data-type="${type}" data-i="${i}">
+          <span class="emoji">${label.slice(-2)}</span>
+          <span class="txt">${label.slice(0,-2).trim()}</span>
+        </div>
+      `).join("")}
+    </div>
+    ${qIndex > 0 ? `<button class="btn btn-ghost" id="prevBtn" style="width:100%; margin-top:10px;">⬅️ السؤال السابق</button>` : ""}
+  `;
+  document.querySelectorAll(".opt").forEach(el => {
+    el.onclick = () => {
+      const type = el.getAttribute("data-type");
+      state.answers[qIndex] = type;
+      if(state.current < QUESTIONS.length - 1){
+        state.current++;
+        render();
+      } else {
+        state.screen = "review";
+        render();
+      }
+    };
+  });
+  const prevBtn = document.getElementById("prevBtn");
+  if(prevBtn){
+    prevBtn.onclick = () => {
+      state.current--;
+      render();
+    };
+  }
+}
+
+function renderReview(){
+  footerNote.textContent = "";
+  app.innerHTML = `
+    <div style="text-align:center; font-size:44px; margin-bottom:6px;">✅</div>
+    <h2 style="text-align:center; font-size:19px; margin:6px 0 4px;">خلصتِ كل الأسئلة!</h2>
+    <p class="desc" style="text-align:center;">تأكدي أن كل إجاباتك دقيقة، ولتغيير أي إجابة اضغطي على (الرجوع للتعديل).</p>
+    <button class="btn btn-primary" id="saveBtn">💾 حفظ النتيجة</button>
+    <button class="btn btn-secondary" id="backEditBtn">⬅️ رجوع للتعديل</button>
+  `;
+  document.getElementById("saveBtn").onclick = () => finishQuiz();
+  document.getElementById("backEditBtn").onclick = () => {
+    state.current = QUESTIONS.length - 1;
+    state.screen = "quiz";
+    render();
+  };
+}
+
+async function finishQuiz(){
+  const scores = { V:0, A:0, R:0, K:0 };
+  state.answers.forEach(t => scores[t]++);
+  const max = Math.max(...Object.values(scores));
+  const dominant = Object.keys(scores).filter(t => scores[t] === max);
+  state.scores = scores;
+  state.dominant = dominant;
+
+  const saveBtn = document.getElementById("saveBtn");
+  if(saveBtn){ saveBtn.textContent = "جارٍ الحفظ..."; saveBtn.disabled = true; }
+
+  try{
+    await fbSaveStudent(state.pin, state.grade, state.section, state.name, {
+      scores, dominant, date: new Date().toISOString()
+    });
+  }catch(e){
+    console.error("تعذر الحفظ", e);
+    alert("صار خطأ بالحفظ، تأكدي من الاتصال بالإنترنت وحاولي مرة ثانية.");
+    if(saveBtn){ saveBtn.textContent = "💾 حفظ النتيجة"; saveBtn.disabled = false; }
+    return;
+  }
+
+  state.screen = "result";
+  render();
+}
+
+function renderResult(){
+  const scores = state.scores;
+  const dominant = state.dominant;
+  const total = QUESTIONS.length;
+  const isMulti = dominant.length > 1;
+  footerNote.textContent = "تم حفظ نتيجة " + state.name + " ✅";
+
+  const mainType = TYPES[dominant[0]];
+  app.innerHTML = `
+    <div class="result-emoji">${dominant.map(d=>TYPES[d].emoji).join(" ")}</div>
+    <div class="result-name">${state.name}</div>
+    <div style="text-align:center; color:#8b85a3; font-size:13.5px; margin-bottom:8px;">${state.grade} — فصل ${state.section}</div>
+    <div class="result-type" style="color:${mainType.color}">
+      ${isMulti ? "نمط متعدد: " + dominant.map(d=>TYPES[d].name).join(" + ") : "النمط: " + mainType.name}
+    </div>
+    <div class="result-desc">${isMulti ? "تتعلمين بأكثر من طريقة بشكل متقارب — مرونة رائعة!" : mainType.desc}</div>
+
+    <div class="bars">
+      ${Object.keys(TYPES).map(t => `
+        <div class="bar-row">
+          <div class="bar-label">${TYPES[t].emoji} ${TYPES[t].name}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${(scores[t]/total)*100}%; background:${TYPES[t].color}"></div></div>
+          <div style="width:20px; font-size:13px; color:#8b85a3;">${scores[t]}</div>
+        </div>
+      `).join("")}
+    </div>
+
+    <div class="tips-box">
+      <b>💡 نصيحة للمعلمة:</b><br/>
+      ${dominant.map(d => TYPES[d].tips).join("<br/>")}
+    </div>
+  `;
+}
+
+/* ---------- Dashboard / reports ---------- */
+let allStudents = [];
+
+function downloadPdf(){
+  const btn = document.getElementById("printBtn");
+  const titleEl = document.getElementById("printReportTitle");
+  if(btn) btn.textContent = "⏳ جارٍ التجهيز...";
+  document.body.classList.add("generating-pdf");
+  if(titleEl) titleEl.style.display = "block";
+
+  const opt = {
+    margin: 8,
+    filename: "تقرير-VARK.pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: { scale: 2, useCORS: true },
+    jsPDF: { unit: "mm", format: "a4", orientation: "portrait" }
+  };
+
+  const target = document.getElementById("app");
+  const finish = () => {
+    document.body.classList.remove("generating-pdf");
+    if(titleEl) titleEl.style.display = "none";
+    if(btn) btn.textContent = "🖨️ تحميل PDF";
+  };
+
+  if(window.html2pdf){
+    window.html2pdf().set(opt).from(target).save().then(finish).catch(() => { finish(); alert("تعذر إنشاء الملف، جربي مرة ثانية."); });
+  } else {
+    finish();
+    window.print();
+  }
+}
+
+
+async function renderDashboard(){
+  footerNote.textContent = "";
+  if(!state.reportLevel) state.reportLevel = "grade";
+  app.innerHTML = `
+    <div class="top-actions">
+      <button class="icon-btn" id="backBtn">⬅️ رجوع</button>
+      <span style="font-weight:700;">📊 تقرير الفصول</span>
+      <button class="icon-btn" id="printBtn">🖨️ تحميل PDF</button>
+    </div>
+    <div id="printReportTitle" style="display:none; text-align:center; margin-bottom:16px;">
+      <div style="font-weight:800; font-size:18px;">تقرير أنماط التعلم VARK</div>
+      <div style="font-size:13px; color:#666;">${state.teacherData.teacherName || "—"} — الابتدائية ٣٨</div>
+      <div style="font-size:12px; color:#999;">${new Date().toLocaleDateString('ar-SA')}</div>
+    </div>
+
+    <div class="report-filters">
+    <div style="text-align:center; font-weight:700; margin-bottom:12px;">🎯 اختاري مستوى التقرير</div>
+    <div class="level-tabs" id="levelTabs">
+      <button class="level-tab" data-level="grade">📘 حسب الصف</button>
+      <button class="level-tab" data-level="section">📗 حسب الفصل</button>
+      <button class="level-tab" data-level="student">🧑‍🎓 حسب الطالبة</button>
+    </div>
+    <div id="filterArea" style="margin-top:14px;"></div>
+    </div>
+    <div id="dashContent"><div class="empty-msg">جارٍ التحميل...</div></div>
+  `;
+  document.getElementById("backBtn").onclick = () => {
+    state.screen = "teacherMenu";
+    render();
+  };
+  document.getElementById("printBtn").onclick = () => downloadPdf();
+
+  document.querySelectorAll(".level-tab").forEach(btn => {
+    btn.onclick = () => {
+      state.reportLevel = btn.getAttribute("data-level");
+      updateFilterArea();
+    };
+  });
+
+  const content = document.getElementById("dashContent");
+  try{
+    allStudents = await fbGetStudents(state.pin);
+    if(allStudents.length === 0){
+      content.innerHTML = `<div class="empty-msg">ما فيه نتائج مسجلة بعد 🙂<br/>شاركي رابط طالباتك أول.</div>`;
+    }
+    updateFilterArea();
+  }catch(e){
+    content.innerHTML = `<div class="empty-msg">صار خطأ بتحميل النتائج، تأكدي من الإنترنت وحاولي مرة ثانية.</div>`;
+  }
+}
+
+function updateFilterArea(){
+  document.querySelectorAll(".level-tab").forEach(btn => {
+    btn.classList.toggle("active", btn.getAttribute("data-level") === state.reportLevel);
+  });
+  const grades = state.teacherData.grades || DEFAULT_GRADES;
+  const sections = state.teacherData.sections || DEFAULT_SECTIONS;
+  const area = document.getElementById("filterArea");
+  if(state.reportLevel === "grade"){
+    area.innerHTML = `
+      <label class="field-label" style="margin-bottom:6px;">اختاري الصف</label>
+      <select id="filterGrade" class="select-field" style="margin-bottom:6px;">
+        <option value="">-- اختاري صفًا --</option>
+        ${grades.map(g => `<option value="${g}">${g}</option>`).join("")}
+      </select>
+      <div style="text-align:center; color:#a39dbb; font-size:12.5px; margin-bottom:16px;">التقرير يشمل كل فصول هذا الصف مع بعض</div>
+    `;
+    document.getElementById("filterGrade").onchange = renderDashList;
+  } else if(state.reportLevel === "section"){
+    area.innerHTML = `
+      <div style="display:flex; gap:10px; margin-bottom:6px;">
+        <div style="flex:1;">
+          <label class="field-label" style="margin-bottom:6px; font-size:13px;">الصف</label>
+          <select id="filterGrade" class="select-field">
+            <option value="">-- اختاري صفًا --</option>
+            ${grades.map(g => `<option value="${g}">${g}</option>`).join("")}
+          </select>
+        </div>
+        <div style="flex:1;">
+          <label class="field-label" style="margin-bottom:6px; font-size:13px;">الفصل</label>
+          <select id="filterSection" class="select-field">
+            <option value="">-- اختاري فصلًا --</option>
+            ${sections.map(s => `<option value="${s}">فصل ${s}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+      <div style="text-align:center; color:#a39dbb; font-size:12.5px; margin-bottom:16px;">التقرير يكون لفصل واحد محدد فقط</div>
+    `;
+    document.getElementById("filterGrade").onchange = renderDashList;
+    document.getElementById("filterSection").onchange = renderDashList;
+  } else {
+    area.innerHTML = `
+      <div style="display:flex; gap:10px; margin-bottom:6px;">
+        <div style="flex:1;">
+          <label class="field-label" style="margin-bottom:6px; font-size:13px;">الصف</label>
+          <select id="filterGrade" class="select-field">
+            <option value="">كل الصفوف</option>
+            ${grades.map(g => `<option value="${g}">${g}</option>`).join("")}
+          </select>
+        </div>
+        <div style="flex:1;">
+          <label class="field-label" style="margin-bottom:6px; font-size:13px;">الفصل</label>
+          <select id="filterSection" class="select-field">
+            <option value="">كل الفصول</option>
+            ${sections.map(s => `<option value="${s}">فصل ${s}</option>`).join("")}
+          </select>
+        </div>
+      </div>
+      <label class="field-label" style="margin-bottom:6px;">الطالبة</label>
+      <select id="filterName" class="select-field" style="margin-bottom:16px;">
+        <option value="">-- اختاري طالبة --</option>
+      </select>
+    `;
+    const refreshStudentOptions = () => {
+      const gEl = document.getElementById("filterGrade");
+      const sEl = document.getElementById("filterSection");
+      const nameSel = document.getElementById("filterName");
+      const g = gEl.value, s = sEl.value;
+      const current = nameSel.value;
+      const matches = allStudents
+        .filter(st => (!g || st.grade === g) && (!s || st.section === s))
+        .sort((a,b) => a.name.localeCompare(b.name, 'ar'));
+      nameSel.innerHTML = `<option value="">-- اختاري طالبة (${matches.length}) --</option>` +
+        matches.map(st => `<option value="${st.name}">${st.name}${!g||!s ? ' — '+st.grade+' فصل '+st.section : ''}</option>`).join("");
+      if(matches.some(st => st.name === current)) nameSel.value = current;
+    };
+    document.getElementById("filterGrade").onchange = () => { refreshStudentOptions(); renderDashList(); };
+    document.getElementById("filterSection").onchange = () => { refreshStudentOptions(); renderDashList(); };
+    document.getElementById("filterName").onchange = renderDashList;
+    refreshStudentOptions();
+  }
+  renderDashList();
+}
+
+function renderDashList(){
+  const content = document.getElementById("dashContent");
+  const gradeEl = document.getElementById("filterGrade");
+  const sectionEl = document.getElementById("filterSection");
+  const nameEl = document.getElementById("filterName");
+  const grade = gradeEl ? gradeEl.value : "";
+  const section = sectionEl ? sectionEl.value : "";
+  const nameQuery = nameEl ? nameEl.value.trim() : "";
+  let filtered = allStudents.filter(s =>
+    (!grade || s.grade === grade) && (!section || s.section === section) &&
+    (!nameQuery || s.name.includes(nameQuery))
+  );
+  filtered.sort((a,b) => a.name.localeCompare(b.name, 'ar'));
+
+  if(filtered.length === 0){
+    content.innerHTML = `<div class="empty-msg">ما فيه نتائج مطابقة لهذا الفلتر.</div>`;
+    return;
+  }
+
+  const counts = { V:0, A:0, R:0, K:0 };
+  filtered.forEach(s => (s.dominant || []).forEach(d => counts[d]++));
+
+  const summaryHtml = `
+    <div class="bars" style="margin-bottom:18px;">
+      ${Object.keys(TYPES).map(t => `
+        <div class="bar-row">
+          <div class="bar-label">${TYPES[t].emoji} ${TYPES[t].name}</div>
+          <div class="bar-track"><div class="bar-fill" style="width:${filtered.length ? (counts[t]/filtered.length)*100 : 0}%; background:${TYPES[t].color}"></div></div>
+          <div style="width:20px; font-size:13px; color:#8b85a3;">${counts[t]}</div>
+        </div>
+      `).join("")}
+    </div>
+    <div style="text-align:center; color:#8b85a3; font-size:13.5px; margin-bottom:14px;">عدد الطالبات: ${filtered.length}</div>
+  `;
+
+  const listHtml = filtered.map((s, idx) => {
+    const dom = s.dominant || [];
+    const label = dom.map(d => TYPES[d].name).join(" + ");
+    const color = TYPES[dom[0]].color;
+    return `
+      <div class="dash-item" data-idx="${idx}">
+        <div>
+          <div class="nm">${s.name}</div>
+          <div style="font-size:12px; color:#a39dbb;">${s.grade || ""} ${s.section ? "— فصل " + s.section : ""}</div>
+        </div>
+        <div class="actions">
+          <span class="tp" style="background:${color}">${dom.map(d=>TYPES[d].emoji).join(" ")} ${label}</span>
+          <button class="dash-edit" data-edit="${idx}" title="تعديل">✏️</button>
+          <button class="dash-del" data-del="${idx}" title="حذف">🗑️</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  content.innerHTML = summaryHtml + `<div class="dash-list" id="dashListInner">${listHtml}</div>`;
+
+  content.querySelectorAll("[data-del]").forEach(btn => {
+    btn.onclick = async () => {
+      const idx = Number(btn.getAttribute("data-del"));
+      const s = filtered[idx];
+      if(!confirm(`متأكدة تبين تحذفين نتيجة "${s.name}"؟ هذا لا يمكن التراجع عنه.`)) return;
+      try{
+        await fbDeleteStudent(s._id);
+        allStudents = allStudents.filter(x => x._id !== s._id);
+        renderDashList();
+      }catch(e){ alert("تعذر الحذف، حاولي مرة ثانية."); }
+    };
+  });
+
+  content.querySelectorAll("[data-edit]").forEach(btn => {
+    btn.onclick = () => {
+      const idx = Number(btn.getAttribute("data-edit"));
+      openEditRow(idx, filtered);
+    };
+  });
+}
+
+function openEditRow(idx, filtered){
+  const s = filtered[idx];
+  const grades = state.teacherData.grades || DEFAULT_GRADES;
+  const sections = state.teacherData.sections || DEFAULT_SECTIONS;
+  const row = document.querySelector(`#dashListInner .dash-item[data-idx="${idx}"]`);
+  if(!row) return;
+  row.innerHTML = `
+    <div style="width:100%;">
+      <label class="field-label" style="margin-bottom:4px;">الاسم</label>
+      <input type="text" id="editName" class="select-field" value="${s.name}" style="margin-bottom:8px;">
+      <div style="display:flex; gap:8px; margin-bottom:8px;">
+        <select id="editGrade" class="select-field">
+          ${grades.map(g => `<option value="${g}" ${g===s.grade?"selected":""}>${g}</option>`).join("")}
+        </select>
+        <select id="editSection" class="select-field">
+          ${sections.map(sec => `<option value="${sec}" ${sec===s.section?"selected":""}>فصل ${sec}</option>`).join("")}
+        </select>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button class="btn btn-primary" id="editSave" style="margin-top:0;">حفظ</button>
+        <button class="btn btn-secondary" id="editCancel" style="margin-top:0;">إلغاء</button>
+      </div>
+    </div>
+  `;
+  document.getElementById("editCancel").onclick = () => renderDashList();
+  document.getElementById("editSave").onclick = async () => {
+    const newName = document.getElementById("editName").value.trim();
+    const newGrade = document.getElementById("editGrade").value;
+    const newSection = document.getElementById("editSection").value;
+    if(!newName){ alert("لازم تكتبين اسم."); return; }
+    try{
+      if(s.name !== newName || s.grade !== newGrade || s.section !== newSection){
+        await fbDeleteStudent(s._id);
+      }
+      const newId = await fbSaveStudent(state.pin, newGrade, newSection, newName, {
+        scores: s.scores, dominant: s.dominant, date: s.date
+      });
+      allStudents = allStudents.filter(x => x._id !== s._id);
+      allStudents.push({ _id: newId, pin: state.pin, name:newName, grade:newGrade, section:newSection, scores:s.scores, dominant:s.dominant, date:s.date });
+      renderDashList();
+    }catch(e){ alert("تعذر الحفظ، حاولي مرة ثانية."); }
+  };
+}
+
+/* ---------- Init ---------- */
+async function init(){
+  if(state.screen === "start" && state.pin){
+    try{ state.teacherData = await fbEnsureTeacher(state.pin); }
+    catch(e){ console.error(e); }
+  }
+  updateBrandLine();
+  render();
+}
+init();
+</script>
+</body>
+</html>
